@@ -1,6 +1,6 @@
 # RFUnicodeInfo
 
-![](blob/master/UnicodeInfo.roboFontExt/html/dialog.png)
+![](UnicodeInfo.roboFontExt/html/dialog.png)
 
 Unicode Info displays information about the current glyph:
 
