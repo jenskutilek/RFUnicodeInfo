@@ -13,8 +13,8 @@ A smiling face means that your glyph name and Unicode value are matching. An ang
 
 Unicode Info also offers useful actions:
 
-* Reassign all Unicode values in the curren font based on the glyph names
+* Reassign all Unicode values in the current font based on glyph names
 * Switch to the corresponding uppercase or lowercase version of the current glyph
-* Show the contents of the selected Unicode block (as template glyphs directly in the font windows)
+* Show the contents of the selected Unicode block (as template glyphs directly in the font window)
 
 Bring up the Unicode Info window using the shortcut ctrl-cmd-U.
