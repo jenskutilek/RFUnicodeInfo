@@ -9,7 +9,9 @@ Unicode Info displays information about the current glyph:
 * AGLFN or GNFUL glyph name (incl. validation)
 * Unicode block
 
-It also offers useful functions:
+A smiling face means that your glyph name and Unicode value are matching. An angry face means things are not like they should be.
+
+Unicode Info also offers useful actions:
 
 * Reassign all Unicode values in the curren font based on the glyph names
 * Switch to the corresponding uppercase or lowercase version of the current glyph
