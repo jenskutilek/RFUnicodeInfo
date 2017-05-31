@@ -587,12 +587,4 @@ nameToUnicode = {
 	'zdotaccent': 0x017C, # LATIN SMALL LETTER Z WITH DOT ABOVE
 	'zero': 0x0030, # DIGIT ZERO
 	'zeta': 0x03B6, # GREEK SMALL LETTER ZETA
-	# Local additions:
-	'CR': 0x000d,
-	'NULL': 0x0000,
-	'fi': 0xfb01,
-	'fl': 0xfb02,
-	'onesuperior': 0x00b9,
-	'threesuperior': 0x00b3,
-	'twosuperior': 0x00b2,
 }

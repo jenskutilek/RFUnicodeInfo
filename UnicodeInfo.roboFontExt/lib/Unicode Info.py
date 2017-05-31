@@ -212,6 +212,7 @@ class UnicodeInfoUI(BaseWindowController):
     
     
     def selectBlock(self, sender=None, name=""):
+        i = 0
         if sender is None:
             if name == "":
                 self.w.block_list.set(0)
