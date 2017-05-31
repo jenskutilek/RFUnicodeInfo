@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import print_function, division, absolute_import
 
-from uniName import uniName
-from uniCat import uniCat
-from uniCase import uniUpperCaseMapping, uniLowerCaseMapping
-from uniDecomposition import uniDecompositionMapping
+from .uniName import uniName
+from .uniNiceName import nice_name_rules
+from .uniCat import uniCat
+from .uniCase import uniUpperCaseMapping, uniLowerCaseMapping
+from .uniDecomposition import uniDecompositionMapping
 
 categoryName = {
 	'Lu':	'Letter, Uppercase',
@@ -67,10 +69,11 @@ def getUnicodeChar(code):
 	
 	:param code: The codepoint
 	:type code: int"""
-	if code < 0x10000:
-		return unichr(code)
-	else:
-		return eval("u'\U%08X'" % code)
+	from sys import version as sys_version
+	if sys_version[0] == '2':
+		from jkUnicode.tools.py2 import getUnicodeCharPy2
+		return getUnicodeCharPy2(code)
+	return chr(code)
 
 
 class UniInfo(object):
@@ -106,6 +109,7 @@ class UniInfo(object):
 			self._dc_mapping = []
 		else:
 			self._name = uniName.get(self._unicode, None)
+			# TODO: Add nicer names based on original Unicode names?
 			if self._name is None:
 				if 0xE000 <= self._unicode < 0xF8FF:
 					self._name = "<Private Use #%i>" % (self._unicode - 0xe000)
@@ -137,7 +141,7 @@ class UniInfo(object):
 		if self._dc_mapping:
 			s += "\nDecomposition: %s" % (" ".join(["0x%04X" % m for m in self._dc_mapping]))
 		return s
-	
+
 	@property
 	def category(self):
 		"""The name of the category for the current Unicode value as string."""
@@ -156,13 +160,22 @@ class UniInfo(object):
 	@property
 	def glyphname(self):
 		"""The AGLFN glyph name for the current Unicode value as string."""
-		from aglfn import getGlyphnameForUnicode
+		from .aglfn import getGlyphnameForUnicode
 		return getGlyphnameForUnicode(self.unicode)
 	
 	@property
 	def name(self):
 		"""The Unicode name for the current Unicode value as string."""
 		return self._name
+	
+	@property
+	def nice_name(self):
+		"""The Unicode name for the current Unicode value as string."""
+		for transform_function in nice_name_rules:
+			result = transform_function(self._name)
+			if result:
+				return result
+		return self._name.capitalize()
 	
 	@property
 	def decomposition_mapping(self):
@@ -183,21 +196,21 @@ class UniInfo(object):
 
 
 if __name__ == '__main__':
-	print "\n*** Test of jkUnicode.UniInfo ***"
+	print("\n*** Test of jkUnicode.UniInfo ***")
 	for u in [9912, 80, 0x1E40]:
 		j = UniInfo(u)
-		print "Repr.:"
-		print j
-		print "- " * 20
-		print "             Name:", j.name
-		print "       Glyph Name:", j.glyphname
-		print "         Category:", j.category
-		print "    Decomposition:", " ".join([hex(n) for n in j.decomposition_mapping])
-		print "        Character:", j.char
+		print("Repr.:")
+		print(j)
+		print("- " * 20)
+		print("             Name:", j.name)
+		print("       Glyph Name:", j.glyphname)
+		print("         Category:", j.category)
+		print("    Decomposition:", " ".join([hex(n) for n in j.decomposition_mapping]))
+		print("        Character:", j.char)
 		lc = j.lc_mapping
-		print "Lowercase Mapping:", lc
+		print("Lowercase Mapping:", lc)
 		if lc is not None:
 			j.unicode = lc
-			print j
-		print "-" * 40
+			print(j)
+		print("-" * 40)
 	

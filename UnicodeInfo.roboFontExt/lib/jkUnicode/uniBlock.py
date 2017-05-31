@@ -1,5 +1,7 @@
-from tools.helpers import RangeDict
-from uniBlockData import uniBlocks
+from __future__ import print_function, division, absolute_import
+
+from .tools.helpers import RangeDict
+from .uniBlockData import uniBlocks
 
 uniBlockToName = RangeDict(uniBlocks)
 
@@ -9,7 +11,7 @@ for k, v in uniBlockToName.items():
 	if not v in uniNameToBlock:
 		uniNameToBlock[v] = k
 	else:
-		print "ERROR: Duplicate block name: %s" % v
+		print("ERROR: Duplicate block name: %s" % v)
 
 
 def get_block(codepoint):
@@ -35,7 +37,7 @@ def get_codepoints(block_name):
 
 
 if __name__ == "__main__":
-	print get_block(0x4ff)
-	print get_block(0x500)
-	print get_codepoints_min_max("Cyrillic Supplement")
-	print get_codepoints("Cyrillic Supplement")
+	print(get_block(0x4ff))
+	print(get_block(0x500))
+	print(get_codepoints_min_max("Cyrillic Supplement"))
+	print(get_codepoints("Cyrillic Supplement"))

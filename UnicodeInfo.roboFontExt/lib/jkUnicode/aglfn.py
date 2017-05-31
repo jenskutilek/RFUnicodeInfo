@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function, division, absolute_import
+
 from re import match, compile
-from aglfnData import nameToUnicode
+from .aglfnData import nameToUnicode
 
 # Build reverse dictionary
-unicodeToName = {value: key for key, value in nameToUnicode.iteritems()}
+unicodeToName = {value: key for key, value in nameToUnicode.items()}
 
 def getUnicodeForGlyphname(name):
 	"""Return the Unicode value as integer or None that is assigned to the specified glyph name. It handles AGLFN names, uniXXXX names, uXXXXX names, ligature names, variant names, and PUA-encoded ornament names (orn001 - orn999, starting at 0xEA01).

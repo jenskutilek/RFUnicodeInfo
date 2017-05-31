@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # OS/2 table Unicode Range bits with corresponding Names and Ranges
 # 2011-01-30
 
@@ -209,11 +211,11 @@ def getNameForRangeBit(b):
 def __test__():
 	myRangeBits = [0, 4]
 	for b in myRangeBits:
-		print "\nBit %3i:" % b
+		print("\nBit %3i:" % b)
 		codes = getRangeUnicodesForBit(b)
-		print "Codes:",
+		print("Codes:",)
 		for c in codes:
-			print hex(c),
+			print(hex(c),)
 		
 
 
