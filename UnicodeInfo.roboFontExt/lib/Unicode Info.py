@@ -3,6 +3,9 @@
 ## An extension for the RoboFont editor
 ## Version 0.1 by Jens Kutilek 2016-10-24
 ## Version 1.0 by Jens Kutilek 2017-01-19
+## Version 1.2 by Jens Kutilek 2018-03-29
+
+from __future__ import print_function, division, absolute_import
 
 import vanilla
 import jkUnicode
@@ -453,19 +456,19 @@ class UnicodeInfoUI(BaseWindowController):
             for g in self.font:
                 myUnicode = get_unicode_for_glyphname(g.name)
                 if g.unicode != myUnicode:
-                    print "%s:" % g.name,
+                    print("%s:" % g.name, end='')
                     if g.unicode is not None:
-                        print "%x ->" % g.unicode,
+                        print("%x ->" % g.unicode, end='')
                     else:
-                        print "<None> ->",
+                        print("<None> ->", end='')
                     if myUnicode is not None:
-                        print "%x" % myUnicode,
+                        print("%x" % myUnicode, end='')
                     else:
-                        print "<None>",
+                        print("<None>", end='')
                     if myUnicode in unicodes:
-                        print "-- Ignored: already in use (/%s)." % unicodes[myUnicode]
+                        print("-- Ignored: already in use (/%s)." % unicodes[myUnicode])
                     else:
-                        print
+                        print()
                         g.unicode = myUnicode
                         unicodes[myUnicode] = g.name
     
