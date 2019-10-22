@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-## Unicode Info
-## An extension for the RoboFont editor
-## Version 0.1 by Jens Kutilek 2016-10-24
-## Version 1.0 by Jens Kutilek 2017-01-19
-## Version 1.2 by Jens Kutilek 2018-03-29
+# Unicode Info
+# An extension for the RoboFont editor
+# Version 0.1 by Jens Kutilek 2016-10-24
+# Version 1.0 by Jens Kutilek 2017-01-19
+# Version 1.2 by Jens Kutilek 2018-03-29
 
 from __future__ import print_function, division, absolute_import
 
@@ -17,7 +17,7 @@ from jkUnicode.uniName import uniName
 try:
     from jkUnicode.orthography import OrthographyInfo
     orth_present = True
-except:
+except ImportError:
     orth_present = False
 
 from defconAppKit.windows.baseWindow import BaseWindowController
@@ -37,12 +37,12 @@ def get_extension_map(font):
     for g in font.keys():
         if "." in g[1:]:
             base, ext = g.split(".", 1)
-            if not base in d:
+            if base not in d:
                 d[base] = [g]
             else:
                 d[base].append(g)
         else:
-            if not g in d:
+            if g not in d:
                 d[g] = []
     return d
 
@@ -69,12 +69,10 @@ def get_unicode_for_glyphname(name=None):
     return u
 
 
-
-
 class UnicodeInfoUI(BaseWindowController):
-    
+
     def __init__(self):
-        
+
         width = 320
         if orth_present:
             height = 153
@@ -82,80 +80,107 @@ class UnicodeInfoUI(BaseWindowController):
             height = 116
         ini_height = height - 16
         axis = 50
-        
+
         self.w = vanilla.FloatingWindow(
             (width, ini_height),
             "Unicode Info",
             minSize=(width, height),
             maxSize=(530, height)
         )
-        
+
         y = 10
-        self.w.uni_name_label = vanilla.TextBox((8, y, axis-10, 20),
-                                               "Name",
-                                               sizeStyle="small")
-        self.w.uni_name = vanilla.TextBox((axis, y, -10, 20),
-                                               u"",
-                                               sizeStyle="small")
-        y += 20
-        self.w.code_label = vanilla.TextBox((8, y, axis-10, 20),
-                                               "Code",
-                                               sizeStyle="small")
-        self.w.code = vanilla.TextBox((axis, y, -10, 20),
-                                               u"",
-                                               sizeStyle="small")
-        self.w.reassign_unicodes = vanilla.Button((-81, y-6 , -10, 25), "Assign All",
-            callback=self.reassignUnicodes,
-            sizeStyle="small",
+        self.w.uni_name_label = vanilla.TextBox(
+            (8, y, axis-10, 20),
+            "Name",
+            sizeStyle="small"
+        )
+        self.w.uni_name = vanilla.TextBox(
+            (axis, y, -10, 20),
+            u"",
+            sizeStyle="small"
         )
         y += 20
-        self.w.glyph_name_label = vanilla.TextBox((8, y, axis-10, 20),
-                                               "Glyph",
-                                               sizeStyle="small")
-        self.w.glyph_name = vanilla.TextBox((axis, y, -10, 20),
-                                               u"",
-                                               sizeStyle="small")
-        self.w.case = vanilla.Button((-81, y-6, -10, 25), u"\u2191 \u2193 Case",
+        self.w.code_label = vanilla.TextBox(
+            (8, y, axis-10, 20),
+            "Code",
+            sizeStyle="small"
+        )
+        self.w.code = vanilla.TextBox(
+            (axis, y, -10, 20),
+            u"",
+            sizeStyle="small"
+        )
+        self.w.reassign_unicodes = vanilla.Button(
+            (-81, y-6, -10, 25), "Assign All",
+            callback=self.reassignUnicodes,
+            sizeStyle="small"
+        )
+        y += 20
+        self.w.glyph_name_label = vanilla.TextBox(
+            (8, y, axis-10, 20),
+            "Glyph",
+            sizeStyle="small"
+        )
+        self.w.glyph_name = vanilla.TextBox(
+            (axis, y, -10, 20),
+            u"",
+            sizeStyle="small"
+        )
+        self.w.case = vanilla.Button(
+            (-81, y-6, -10, 25), u"\u2191 \u2193 Case",
             callback=self.toggleCase,
             sizeStyle="small",
         )
         y += 20
-        self.w.block_label = vanilla.TextBox((8, y, axis-10, 20),
-                                               "Block",
-                                               sizeStyle="small")
-        self.w.block_list = vanilla.PopUpButton((axis, y-4, -90, 20),
-                                               [],
-                                               callback=self.selectBlock,
-                                               sizeStyle="small")
-        self.w.block_status = vanilla.CheckBox((-80, y-3, -70, 20),
-                                               "",
-                                               sizeStyle="small")
-        self.w.show_block = vanilla.Button((-60, y-6 , -10, 25), "Show",
+        self.w.block_label = vanilla.TextBox(
+            (8, y, axis-10, 20),
+            "Block",
+            sizeStyle="small")
+        self.w.block_list = vanilla.PopUpButton(
+            (axis, y-4, -90, 20),
+            [],
+            callback=self.selectBlock,
+            sizeStyle="small")
+        self.w.block_status = vanilla.CheckBox(
+            (-80, y-3, -70, 20),
+            "",
+            sizeStyle="small")
+        self.w.show_block = vanilla.Button(
+            (-60, y-6, -10, 25), "Show",
             callback=self.showBlock,
             sizeStyle="small",
         )
         if orth_present:
             y += 20
-            self.w.orthography_label = vanilla.TextBox((8, y, axis-10, 20),
-                                                   "Usage",
-                                                   sizeStyle="small")
-            self.w.orthography_list = vanilla.PopUpButton((axis, y-4, -90, 20),
-                                                   [],
-                                                   callback=self.selectOrthography,
-                                                   sizeStyle="small")
-            self.w.orthography_status = vanilla.CheckBox((-80, y-3, -70, 20),
-                                                   "",
-                                                   sizeStyle="small")
-            self.w.show_orthography = vanilla.Button((-60, y-6 , -10, 25), "Show",
+            self.w.orthography_label = vanilla.TextBox(
+                (8, y, axis-10, 20),
+                "Usage",
+                sizeStyle="small"
+            )
+            self.w.orthography_list = vanilla.PopUpButton(
+                (axis, y-4, -90, 20),
+                [],
+                callback=self.selectOrthography,
+                sizeStyle="small"
+            )
+            self.w.orthography_status = vanilla.CheckBox(
+                (-80, y-3, -70, 20),
+                "",
+                sizeStyle="small"
+            )
+            self.w.show_orthography = vanilla.Button(
+                (-60, y-6, -10, 25), "Show",
                 callback=self.showOrthography,
                 sizeStyle="small",
             )
             y += 20
-            self.w.include_optional = vanilla.CheckBox((axis, y, 200, 20),
+            self.w.include_optional = vanilla.CheckBox(
+                (axis, y, 200, 20),
                 "Include optional characters",
                 callback=self.includeOptional,
-                sizeStyle="small")
-        
+                sizeStyle="small",
+            )
+
         self.info = jkUnicode.UniInfo(0)
         self.unicode = None
         if orth_present:
@@ -181,20 +206,20 @@ class UnicodeInfoUI(BaseWindowController):
                 self.w.include_optional.enable(True)
         self.setUpBaseWindowBehavior()
         self.w.open()
-        #self._updateInfo()
+        # self._updateInfo()
         addObserver(self, "_currentGlyphChanged", "currentGlyphChanged")
-    
+
     @property
     def font(self):
         return self._font
-    
+
     @font.setter
     def font(self, value):
         self._font = value
         if self._font is not None:
             if orth_present:
                 self.ortho.cmap = [g.unicode for g in self.font if g.unicode]
-    
+
     def selectOrthography(self, sender=None, index=-1):
         if sender is None:
             i = index
@@ -212,8 +237,7 @@ class UnicodeInfoUI(BaseWindowController):
                 self.w.orthography_status.set(is_supported)
         else:
             self.w.orthography_status.set(False)
-    
-    
+
     def selectBlock(self, sender=None, name=""):
         i = 0
         if sender is None:
@@ -230,12 +254,12 @@ class UnicodeInfoUI(BaseWindowController):
             i = self.w.block_list.get()
         if i == 0:
             self.w.show_block.enable(False)
-            #self.w.block_status.set(False)
+            # self.w.block_status.set(False)
         else:
             self.w.show_block.enable(True)
             # Show supported status for block
-            #self.w.orthography_status.set(is_supported)
-    
+            # self.w.orthography_status.set(is_supported)
+
     def _updateInfo(self, u=None, fake=False):
         self._updateBlock(u)
         if u is None:
@@ -248,7 +272,7 @@ class UnicodeInfoUI(BaseWindowController):
             self.w.case.enable(False)
             self._updateOrthographies()
             return
-        
+
         self.info.unicode = u
         self.gnful_name = GlyphName(uniNumber=u).getName()
         self.w.uni_name.set(self.info.name.title())
@@ -266,15 +290,22 @@ class UnicodeInfoUI(BaseWindowController):
                     self.w.code.set(u"😡 None → %04X" % u)
                 else:
                     self.w.code.set(u"😡 %04X → %04X" % (self.glyph.unicode, u))
-            
+
             # Glyph name
             if self.glyph.name == self.info.glyphname:
                 self.w.glyph_name.set(u"😀 %s" % self.info.glyphname)
             elif self.glyph.name == self.gnful_name:
-                self.w.glyph_name.set(u"😀 %s (Product: %s)" % (self.gnful_name, self.info.glyphname))
+                self.w.glyph_name.set(u"😀 %s (Product: %s)" % (
+                    self.gnful_name,
+                    self.info.glyphname
+                ))
             else:
-                self.w.glyph_name.set(u"😡 %s → %s or %s" % (self.glyph.name, self.gnful_name, self.info.glyphname))
-            
+                self.w.glyph_name.set(u"😡 %s → %s or %s" % (
+                    self.glyph.name,
+                    self.gnful_name,
+                    self.info.glyphname
+                ))
+
             # Case mapping
             lc = self.info.lc_mapping
             if lc is None:
@@ -295,8 +326,7 @@ class UnicodeInfoUI(BaseWindowController):
                 else:
                     self.w.case.enable(True)
         self._updateOrthographies()
-    
-    
+
     def _updateBlock(self, u):
         if u is None:
             self.w.block_list.set(0)
@@ -311,8 +341,7 @@ class UnicodeInfoUI(BaseWindowController):
             else:
                 self.w.block_list.set(0)
                 self.w.show_block.enable(False)
-    
-    
+
     def _updateOrthographies(self):
         if not orth_present:
             return
@@ -320,21 +349,32 @@ class UnicodeInfoUI(BaseWindowController):
         old_index = self.w.orthography_list.get()
         if old_index > -1:
             old_sel = self.ortho_list[self.w.orthography_list.get()].name
-        else: old_sel = None
+        else:
+            old_sel = None
         new_index = 0
-        
+
         # Check which orthographies use current unicode
         if self.glyph is None:
             # Show all
             self.ortho_list = [o for o in sorted(self.ortho.orthographies)]
         else:
             if self.include_optional:
-                self.ortho_list = [o for o in sorted(self.ortho.get_orthographies_for_unicode_any(self.unicode))]
+                self.ortho_list = [
+                    o
+                    for o in sorted(
+                        self.ortho.get_orthographies_for_unicode_any(self.unicode)
+                    )
+                ]
             else:
-                self.ortho_list = [o for o in sorted(self.ortho.get_orthographies_for_unicode(self.unicode))]
-        
+                self.ortho_list = [
+                    o
+                    for o in sorted(
+                        self.ortho.get_orthographies_for_unicode(self.unicode)
+                    )
+                ]
+
         self.w.orthography_list.setItems([o.name for o in self.ortho_list])
-        
+
         if len(self.ortho_list) == 0:
             self.w.orthography_list.enable(False)
             self.w.show_orthography.enable(False)
@@ -346,21 +386,22 @@ class UnicodeInfoUI(BaseWindowController):
                 names = self.w.orthography_list.getItems()
                 if old_sel in names:
                     new_index = names.index(old_sel)
-        
+
         self.selectOrthography(index=new_index)
-    
-    
+
     def _currentGlyphChanged(self, info):
         self.glyph = info["glyph"]
         self.view = info["view"]
         self.font = CurrentFont()
         if self.font is None:
             self.w.reassign_unicodes.enable(False)
-            if orth_present: self.w.include_optional.enable(False)
+            if orth_present:
+                self.w.include_optional.enable(False)
             self.w.show_block.enable(False)
         else:
             self.w.reassign_unicodes.enable(True)
-            if orth_present: self.w.include_optional.enable(True)
+            if orth_present:
+                self.w.include_optional.enable(True)
             self.w.show_block.enable(True)
         if self.glyph is None:
             self._updateInfo(None)
@@ -384,14 +425,12 @@ class UnicodeInfoUI(BaseWindowController):
                     base = self.glyph.name
                     self.unicode = get_unicode_for_glyphname(base)
             self._updateInfo(self.unicode, fake)
-    
-    
+
     def includeOptional(self, sender=None):
         if sender is not None:
             self.include_optional = sender.get()
             self._updateOrthographies()
-    
-    
+
     def showOrthography(self, sender=None):
         # Callback for the "Show" button of the Orthographies list
         if sender is not None:
@@ -401,29 +440,32 @@ class UnicodeInfoUI(BaseWindowController):
                 if i < len(items):
                     orthography = self.ortho_list[i]
                     glyph_list = ["_BASE_"]
-                    
+
                     base = jkUnicode.get_expanded_glyph_list(orthography.unicodes_base)
                     base = get_extra_names(self.font, base)
                     glyph_list.extend([t[1] for t in sorted(base)])
-                    
+
                     punc = jkUnicode.get_expanded_glyph_list(orthography.unicodes_punctuation)
                     punc = get_extra_names(self.font, punc)
                     glyph_list.append("_PUNCT_")
                     if punc:
                         glyph_list.extend([t[1] for t in sorted(punc)])
-                    
+
                     if self.include_optional:
                         optn = jkUnicode.get_expanded_glyph_list(orthography.unicodes_optional)
                         optn = get_extra_names(self.font, optn)
                         glyph_list.append("_OPTIONAL_")
                         if optn:
-                            glyph_list.extend([t[1] for t in sorted(optn) if not t[1] in glyph_list])
+                            glyph_list.extend([
+                                t[1]
+                                for t in sorted(optn)
+                                if not t[1] in glyph_list
+                            ])
                     glyph_list.append("_END_")
                     self.font.glyphOrder = glyph_list
                 # Set the selection to the same index as before
                 self.selectOrthography(sender=None, index=i)
-    
-    
+
     def showBlock(self, sender=None):
         # Callback for the "Show" button of the Unicode blocks list
         if sender is not None:
@@ -433,14 +475,17 @@ class UnicodeInfoUI(BaseWindowController):
                 if i < len(items):
                     block = items[i]
                     glyph_list = ["_START_"]
-                    tuples = [(cp, getGlyphnameForUnicode(cp)) for cp in get_codepoints(block) if cp in uniName]
+                    tuples = [
+                        (cp, getGlyphnameForUnicode(cp))
+                        for cp in get_codepoints(block)
+                        if cp in uniName
+                    ]
                     names = get_extra_names(self.font, tuples)
                     names.sort()
                     glyph_list.extend([n[1] for n in names])
                     glyph_list.append("_END_")
                     self.font.glyphOrder = glyph_list
-    
-    
+
     def toggleCase(self, sender=None):
         if self.view is None or self.font is None:
             return
@@ -448,11 +493,14 @@ class UnicodeInfoUI(BaseWindowController):
             glyphname = getGlyphnameForUnicode(self.case)
             if glyphname in self.font:
                 SetCurrentGlyphByName(glyphname)
-    
-    
+
     def reassignUnicodes(self, sender=None):
         if self.font is not None:
-            unicodes = {g.unicode: g.name for g in self.font if g.unicode}
+            unicodes = {
+                g.unicode: g.name
+                for g in self.font
+                if g.unicode
+            }
             for g in self.font:
                 myUnicode = get_unicode_for_glyphname(g.name)
                 if g.unicode != myUnicode:
@@ -471,11 +519,10 @@ class UnicodeInfoUI(BaseWindowController):
                         print()
                         g.unicode = myUnicode
                         unicodes[myUnicode] = g.name
-    
-            
+
     def windowCloseCallback(self, sender):
         removeObserver(self, "currentGlyphChanged")
         super(UnicodeInfoUI, self).windowCloseCallback(sender)
- 
+
 
 OpenWindow(UnicodeInfoUI)
