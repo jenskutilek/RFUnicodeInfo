@@ -1,5 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
 import re
 
 re_small_letter = re.compile(r"^(.+SMALL LETTER )([A-Z\- ]+?)( WITH.+)?$")
@@ -52,7 +50,7 @@ def transform_capital_letter(name):
                 result += t_name
             else:
                 result += letter_names.get(m.group(2), m.group(2).title())
-        else:   
+        else:
             result += letter_names.get(m.group(2), m.group(2).title())
         if m.group(3) is not None:
             result += "%s" % m.group(3).lower()

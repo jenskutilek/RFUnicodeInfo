@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import print_function, division, absolute_import
 
-from .uniBlock import get_block
-from .uniName import uniName
-from .uniNiceName import nice_name_rules
-from .uniCat import uniCat
-from .uniCase import uniUpperCaseMapping, uniLowerCaseMapping
-from .uniDecomposition import uniDecompositionMapping
-from .uniScript import get_script
+from jkUnicode.uniBlock import get_block
+from jkUnicode.uniName import uniName
+from jkUnicode.uniNiceName import nice_name_rules
+from jkUnicode.uniCat import uniCat
+from jkUnicode.uniCase import uniUpperCaseMapping, uniLowerCaseMapping
+from jkUnicode.uniDecomposition import uniDecompositionMapping
+from jkUnicode.uniScript import get_script
 
 categoryName = {
     'Lu':   'Letter, Uppercase',
@@ -127,7 +126,7 @@ class UniInfo(object):
             # TODO: Add nicer names based on original Unicode names?
             if self._name is None:
                 if 0xE000 <= self._unicode < 0xF8FF:
-                    self._name = "<Private Use #%i>" % (self._unicode - 0xe000)
+                    self._name = "<Private Use>"
                 elif 0xD800 <= self._unicode < 0xDB7F:
                     self._name = "<Non Private Use High Surrogate #%i>" % (
                         self._unicode - 0xd8000

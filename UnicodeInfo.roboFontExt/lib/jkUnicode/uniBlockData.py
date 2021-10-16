@@ -21,6 +21,7 @@ uniBlocks = {
     (0x0800, 0x083f): 'Samaritan', # 64 characters
     (0x0840, 0x085f): 'Mandaic', # 32 characters
     (0x0860, 0x086f): 'Syriac Supplement', # 16 characters
+    (0x0870, 0x089f): 'Arabic Extended-B', # 48 characters
     (0x08a0, 0x08ff): 'Arabic Extended-A', # 96 characters
     (0x0900, 0x097f): 'Devanagari', # 128 characters
     (0x0980, 0x09ff): 'Bengali', # 128 characters
@@ -184,7 +185,9 @@ uniBlocks = {
     (0x104b0, 0x104ff): 'Osage', # 80 characters
     (0x10500, 0x1052f): 'Elbasan', # 48 characters
     (0x10530, 0x1056f): 'Caucasian Albanian', # 64 characters
+    (0x10570, 0x105bf): 'Vithkuqi', # 80 characters
     (0x10600, 0x1077f): 'Linear A', # 384 characters
+    (0x10780, 0x107bf): 'Latin Extended-F', # 64 characters
     (0x10800, 0x1083f): 'Cypriot Syllabary', # 64 characters
     (0x10840, 0x1085f): 'Imperial Aramaic', # 32 characters
     (0x10860, 0x1087f): 'Palmyrene', # 32 characters
@@ -206,8 +209,11 @@ uniBlocks = {
     (0x10c80, 0x10cff): 'Old Hungarian', # 128 characters
     (0x10d00, 0x10d3f): 'Hanifi Rohingya', # 64 characters
     (0x10e60, 0x10e7f): 'Rumi Numeral Symbols', # 32 characters
+    (0x10e80, 0x10ebf): 'Yezidi', # 64 characters
     (0x10f00, 0x10f2f): 'Old Sogdian', # 48 characters
     (0x10f30, 0x10f6f): 'Sogdian', # 64 characters
+    (0x10f70, 0x10faf): 'Old Uyghur', # 64 characters
+    (0x10fb0, 0x10fdf): 'Chorasmian', # 48 characters
     (0x10fe0, 0x10fff): 'Elymaic', # 32 characters
     (0x11000, 0x1107f): 'Brahmi', # 128 characters
     (0x11080, 0x110cf): 'Kaithi', # 80 characters
@@ -226,27 +232,32 @@ uniBlocks = {
     (0x11600, 0x1165f): 'Modi', # 96 characters
     (0x11660, 0x1167f): 'Mongolian Supplement', # 32 characters
     (0x11680, 0x116cf): 'Takri', # 80 characters
-    (0x11700, 0x1173f): 'Ahom', # 64 characters
+    (0x11700, 0x1174f): 'Ahom', # 80 characters
     (0x11800, 0x1184f): 'Dogra', # 80 characters
     (0x118a0, 0x118ff): 'Warang Citi', # 96 characters
+    (0x11900, 0x1195f): 'Dives Akuru', # 96 characters
     (0x119a0, 0x119ff): 'Nandinagari', # 96 characters
     (0x11a00, 0x11a4f): 'Zanabazar Square', # 80 characters
     (0x11a50, 0x11aaf): 'Soyombo', # 96 characters
+    (0x11ab0, 0x11abf): 'Unified Canadian Aboriginal Syllabics Extended-A', # 16 characters
     (0x11ac0, 0x11aff): 'Pau Cin Hau', # 64 characters
     (0x11c00, 0x11c6f): 'Bhaiksuki', # 112 characters
     (0x11c70, 0x11cbf): 'Marchen', # 80 characters
     (0x11d00, 0x11d5f): 'Masaram Gondi', # 96 characters
     (0x11d60, 0x11daf): 'Gunjala Gondi', # 80 characters
     (0x11ee0, 0x11eff): 'Makasar', # 32 characters
+    (0x11fb0, 0x11fbf): 'Lisu Supplement', # 16 characters
     (0x11fc0, 0x11fff): 'Tamil Supplement', # 64 characters
     (0x12000, 0x123ff): 'Cuneiform', # 1024 characters
     (0x12400, 0x1247f): 'Cuneiform Numbers and Punctuation', # 128 characters
     (0x12480, 0x1254f): 'Early Dynastic Cuneiform', # 208 characters
+    (0x12f90, 0x12fff): 'Cypro-Minoan', # 112 characters
     (0x13000, 0x1342f): 'Egyptian Hieroglyphs', # 1072 characters
     (0x13430, 0x1343f): 'Egyptian Hieroglyph Format Controls', # 16 characters
     (0x14400, 0x1467f): 'Anatolian Hieroglyphs', # 640 characters
     (0x16800, 0x16a3f): 'Bamum Supplement', # 576 characters
     (0x16a40, 0x16a6f): 'Mro', # 48 characters
+    (0x16a70, 0x16acf): 'Tangsa', # 96 characters
     (0x16ad0, 0x16aff): 'Bassa Vah', # 48 characters
     (0x16b00, 0x16b8f): 'Pahawh Hmong', # 144 characters
     (0x16e40, 0x16e9f): 'Medefaidrin', # 96 characters
@@ -254,12 +265,16 @@ uniBlocks = {
     (0x16fe0, 0x16fff): 'Ideographic Symbols and Punctuation', # 32 characters
     (0x17000, 0x187ff): 'Tangut', # 6144 characters
     (0x18800, 0x18aff): 'Tangut Components', # 768 characters
+    (0x18b00, 0x18cff): 'Khitan Small Script', # 512 characters
+    (0x18d00, 0x18d7f): 'Tangut Supplement', # 128 characters
+    (0x1aff0, 0x1afff): 'Kana Extended-B', # 16 characters
     (0x1b000, 0x1b0ff): 'Kana Supplement', # 256 characters
     (0x1b100, 0x1b12f): 'Kana Extended-A', # 48 characters
     (0x1b130, 0x1b16f): 'Small Kana Extension', # 64 characters
     (0x1b170, 0x1b2ff): 'Nushu', # 400 characters
     (0x1bc00, 0x1bc9f): 'Duployan', # 160 characters
     (0x1bca0, 0x1bcaf): 'Shorthand Format Controls', # 16 characters
+    (0x1cf00, 0x1cfcf): 'Znamenny Musical Notation', # 208 characters
     (0x1d000, 0x1d0ff): 'Byzantine Musical Symbols', # 256 characters
     (0x1d100, 0x1d1ff): 'Musical Symbols', # 256 characters
     (0x1d200, 0x1d24f): 'Ancient Greek Musical Notation', # 80 characters
@@ -268,9 +283,12 @@ uniBlocks = {
     (0x1d360, 0x1d37f): 'Counting Rod Numerals', # 32 characters
     (0x1d400, 0x1d7ff): 'Mathematical Alphanumeric Symbols', # 1024 characters
     (0x1d800, 0x1daaf): 'Sutton SignWriting', # 688 characters
+    (0x1df00, 0x1dfff): 'Latin Extended-G', # 256 characters
     (0x1e000, 0x1e02f): 'Glagolitic Supplement', # 48 characters
     (0x1e100, 0x1e14f): 'Nyiakeng Puachue Hmong', # 80 characters
+    (0x1e290, 0x1e2bf): 'Toto', # 48 characters
     (0x1e2c0, 0x1e2ff): 'Wancho', # 64 characters
+    (0x1e7e0, 0x1e7ff): 'Ethiopic Extended-B', # 32 characters
     (0x1e800, 0x1e8df): 'Mende Kikakui', # 224 characters
     (0x1e900, 0x1e95f): 'Adlam', # 96 characters
     (0x1ec70, 0x1ecbf): 'Indic Siyaq Numbers', # 80 characters
@@ -291,12 +309,14 @@ uniBlocks = {
     (0x1f900, 0x1f9ff): 'Supplemental Symbols and Pictographs', # 256 characters
     (0x1fa00, 0x1fa6f): 'Chess Symbols', # 112 characters
     (0x1fa70, 0x1faff): 'Symbols and Pictographs Extended-A', # 144 characters
+    (0x1fb00, 0x1fbff): 'Symbols for Legacy Computing', # 256 characters
     (0x20000, 0x2a6df): 'CJK Unified Ideographs Extension B', # 42720 characters
     (0x2a700, 0x2b73f): 'CJK Unified Ideographs Extension C', # 4160 characters
     (0x2b740, 0x2b81f): 'CJK Unified Ideographs Extension D', # 224 characters
     (0x2b820, 0x2ceaf): 'CJK Unified Ideographs Extension E', # 5776 characters
     (0x2ceb0, 0x2ebef): 'CJK Unified Ideographs Extension F', # 7488 characters
     (0x2f800, 0x2fa1f): 'CJK Compatibility Ideographs Supplement', # 544 characters
+    (0x30000, 0x3134f): 'CJK Unified Ideographs Extension G', # 4944 characters
     (0xe0000, 0xe007f): 'Tags', # 128 characters
     (0xe0100, 0xe01ef): 'Variation Selectors Supplement', # 240 characters
     (0xf0000, 0xfffff): 'Supplementary Private Use Area-A', # 65536 characters
