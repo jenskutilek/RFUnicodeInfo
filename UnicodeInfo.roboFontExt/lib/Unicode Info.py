@@ -12,8 +12,10 @@ from lib.tools.unicodeTools import getGlyphNameComponentUnicode
 from jkUnicode.aglfn import getGlyphnameForUnicode, getUnicodeForGlyphname
 from jkUnicode.uniBlock import get_block, get_codepoints, uniNameToBlock
 from jkUnicode.uniName import uniName
+
 try:
     from jkUnicode.orthography import OrthographyInfo
+
     orth_present = True
 except ImportError:
     orth_present = False
@@ -79,91 +81,78 @@ class UnicodeInfoUI(Subscriber, WindowController):
             (width, ini_height),
             "Unicode Info",
             minSize=(width, height),
-            maxSize=(530, height)
+            maxSize=(530, height),
         )
 
         y = 10
         self.w.uni_name_label = vanilla.TextBox(
-            (8, y, axis-10, 20),
-            "Name",
-            sizeStyle="small"
+            (8, y, axis - 10, 20), "Name", sizeStyle="small"
         )
         self.w.uni_name = vanilla.TextBox(
-            (axis, y, -10, 20),
-            u"",
-            sizeStyle="small"
+            (axis, y, -10, 20), u"", sizeStyle="small"
         )
         y += 20
         self.w.code_label = vanilla.TextBox(
-            (8, y, axis-10, 20),
-            "Code",
-            sizeStyle="small"
+            (8, y, axis - 10, 20), "Code", sizeStyle="small"
         )
         self.w.code = vanilla.TextBox(
-            (axis, y, -10, 20),
-            u"",
-            sizeStyle="small"
+            (axis, y, -10, 20), u"", sizeStyle="small"
         )
         self.w.reassign_unicodes = vanilla.Button(
-            (-81, y-6, -10, 25), "Assign All",
+            (-81, y - 6, -10, 25),
+            "Assign All",
             callback=self.reassignUnicodes,
-            sizeStyle="small"
+            sizeStyle="small",
         )
         y += 20
         self.w.glyph_name_label = vanilla.TextBox(
-            (8, y, axis-10, 20),
-            "Glyph",
-            sizeStyle="small"
+            (8, y, axis - 10, 20), "Glyph", sizeStyle="small"
         )
         self.w.glyph_name = vanilla.TextBox(
-            (axis, y, -10, 20),
-            u"",
-            sizeStyle="small"
+            (axis, y, -10, 20), u"", sizeStyle="small"
         )
         self.w.case = vanilla.Button(
-            (-81, y-6, -10, 25), u"\u2191 \u2193 Case",
+            (-81, y - 6, -10, 25),
+            u"\u2191 \u2193 Case",
             callback=self.toggleCase,
             sizeStyle="small",
         )
         y += 20
         self.w.block_label = vanilla.TextBox(
-            (8, y, axis-10, 20),
-            "Block",
-            sizeStyle="small")
+            (8, y, axis - 10, 20), "Block", sizeStyle="small"
+        )
         self.w.block_list = vanilla.PopUpButton(
-            (axis, y-4, -90, 20),
+            (axis, y - 4, -90, 20),
             [],
             callback=self.selectBlock,
-            sizeStyle="small")
+            sizeStyle="small",
+        )
         self.w.block_status = vanilla.CheckBox(
-            (-80, y-3, -70, 20),
-            "",
-            sizeStyle="small")
+            (-80, y - 3, -70, 20), "", sizeStyle="small"
+        )
         self.w.show_block = vanilla.Button(
-            (-60, y-6, -10, 25), "Show",
+            (-60, y - 6, -10, 25),
+            "Show",
             callback=self.showBlock,
             sizeStyle="small",
         )
         if orth_present:
             y += 20
             self.w.orthography_label = vanilla.TextBox(
-                (8, y, axis-10, 20),
-                "Usage",
-                sizeStyle="small"
+                (8, y, axis - 10, 20), "Usage", sizeStyle="small"
             )
             self.w.orthography_list = vanilla.PopUpButton(
-                (axis, y-4, -90, 20),
+                (axis, y - 4, -90, 20),
                 [],
                 callback=self.selectOrthography,
-                sizeStyle="small"
+                sizeStyle="small",
             )
             self.w.orthography_status = vanilla.CheckBox(
-                (-80, y-3, -70, 20),
-                "",
-                sizeStyle="small"
+                (-80, y - 3, -70, 20), "", sizeStyle="small"
             )
             self.w.show_orthography = vanilla.Button(
-                (-60, y-6, -10, 25), "Show",
+                (-60, y - 6, -10, 25),
+                "Show",
                 callback=self.showOrthography,
                 sizeStyle="small",
             )
@@ -293,16 +282,15 @@ class UnicodeInfoUI(Subscriber, WindowController):
             if self.glyph.name == self.info.glyphname:
                 self.w.glyph_name.set(u"😀 %s" % self.info.glyphname)
             elif self.glyph.name == self.gnful_name:
-                self.w.glyph_name.set(u"😀 %s (Product: %s)" % (
-                    self.gnful_name,
-                    self.info.glyphname
-                ))
+                self.w.glyph_name.set(
+                    u"😀 %s (Product: %s)"
+                    % (self.gnful_name, self.info.glyphname)
+                )
             else:
-                self.w.glyph_name.set(u"😡 %s → %s or %s" % (
-                    self.glyph.name,
-                    self.gnful_name,
-                    self.info.glyphname
-                ))
+                self.w.glyph_name.set(
+                    u"😡 %s → %s or %s"
+                    % (self.glyph.name, self.gnful_name, self.info.glyphname)
+                )
 
             # Case mapping
             lc = self.info.lc_mapping
@@ -360,7 +348,9 @@ class UnicodeInfoUI(Subscriber, WindowController):
                 self.ortho_list = [
                     o
                     for o in sorted(
-                        self.ortho.get_orthographies_for_unicode_any(self.unicode)
+                        self.ortho.get_orthographies_for_unicode_any(
+                            self.unicode
+                        )
                     )
                 ]
             else:
@@ -447,26 +437,34 @@ class UnicodeInfoUI(Subscriber, WindowController):
                     orthography = self.ortho_list[i]
                     glyph_list = ["_BASE_"]
 
-                    base = jkUnicode.get_expanded_glyph_list(orthography.unicodes_base)
+                    base = jkUnicode.get_expanded_glyph_list(
+                        orthography.unicodes_base
+                    )
                     base = get_extra_names(self.font, base)
                     glyph_list.extend([t[1] for t in sorted(base)])
 
-                    punc = jkUnicode.get_expanded_glyph_list(orthography.unicodes_punctuation)
+                    punc = jkUnicode.get_expanded_glyph_list(
+                        orthography.unicodes_punctuation
+                    )
                     punc = get_extra_names(self.font, punc)
                     glyph_list.append("_PUNCT_")
                     if punc:
                         glyph_list.extend([t[1] for t in sorted(punc)])
 
                     if self.include_optional:
-                        optn = jkUnicode.get_expanded_glyph_list(orthography.unicodes_optional)
+                        optn = jkUnicode.get_expanded_glyph_list(
+                            orthography.unicodes_optional
+                        )
                         optn = get_extra_names(self.font, optn)
                         glyph_list.append("_OPTIONAL_")
                         if optn:
-                            glyph_list.extend([
-                                t[1]
-                                for t in sorted(optn)
-                                if not t[1] in glyph_list
-                            ])
+                            glyph_list.extend(
+                                [
+                                    t[1]
+                                    for t in sorted(optn)
+                                    if not t[1] in glyph_list
+                                ]
+                            )
                     glyph_list.append("_END_")
                     self.font.glyphOrder = glyph_list
                 # Set the selection to the same index as before
@@ -502,26 +500,23 @@ class UnicodeInfoUI(Subscriber, WindowController):
 
     def reassignUnicodes(self, sender=None):
         if self.font is not None:
-            unicodes = {
-                g.unicode: g.name
-                for g in self.font
-                if g.unicode
-            }
+            unicodes = {g.unicode: g.name for g in self.font if g.unicode}
             for g in self.font:
                 myUnicode = get_unicode_for_glyphname(g.name)
                 if g.unicode != myUnicode:
-                    print("%s:" % g.name, end='')
+                    print("%s:" % g.name, end="")
                     if g.unicode is not None:
-                        print("%x ->" % g.unicode, end='')
+                        print("%x ->" % g.unicode, end="")
                     else:
-                        print("<None> ->", end='')
+                        print("<None> ->", end="")
                     if myUnicode is not None:
-                        print("%x" % myUnicode, end='')
+                        print("%x" % myUnicode, end="")
                     else:
-                        print("<None>", end='')
+                        print("<None>", end="")
                     if myUnicode in unicodes:
                         print(
-                            "-- Ignored: already in use (/%s)." % unicodes[myUnicode]
+                            "-- Ignored: already in use (/%s)."
+                            % unicodes[myUnicode]
                         )
                     else:
                         print()
