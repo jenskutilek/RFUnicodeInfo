@@ -302,16 +302,10 @@ class UnicodeInfoUI(Subscriber, WindowController):
                     self.w.case.enable(False)
                 else:
                     self.case = uc
-                    if self.view is None:
-                        self.w.case.enable(False)
-                    else:
-                        self.w.case.enable(True)
+                    self.w.case.enable(True)
             else:
                 self.case = lc
-                if self.view is None:
-                    self.w.case.enable(False)
-                else:
-                    self.w.case.enable(True)
+                self.w.case.enable(True)
         self._updateOrthographies()
 
     def _updateBlock(self, u):
@@ -537,12 +531,16 @@ class UnicodeInfoUI(Subscriber, WindowController):
             self._restoreGlyphSelection(font)
 
     def toggleCase(self, sender=None):
-        if self.view is None or self.font is None:
+        if self.font is None:
             return
+
+        glyphname = getGlyphnameForUnicode(self.case)
+        if self.view is None:
+            # No Glyph Window, use the selection in the Font Window
+            self.font.selectedGlyphNames = [glyphname]
         else:
-            glyphname = getGlyphnameForUnicode(self.case)
-            if glyphname in self.font:
-                SetCurrentGlyphByName(glyphname)
+            # Show the cased glyph in the Glyph Window
+            SetCurrentGlyphByName(glyphname)
 
     def reassignUnicodes(self, sender=None):
         if self.font is not None:
