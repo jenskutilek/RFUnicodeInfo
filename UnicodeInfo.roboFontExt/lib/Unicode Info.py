@@ -172,6 +172,7 @@ class UnicodeInfoUI(Subscriber, WindowController):
         self.glyph = CurrentGlyph()
         self.case = None
         self.view = None
+        self.selectedGlyphs = ()
         self.include_optional = False
         self.font = self.glyph.font if self.glyph is not None else None
         self.w.reassign_unicodes.enable(False)
@@ -423,72 +424,116 @@ class UnicodeInfoUI(Subscriber, WindowController):
             self._updateInfo(self.unicode, fake)
 
     def includeOptional(self, sender=None):
-        if sender is not None:
-            self.include_optional = sender.get()
-            self._updateOrthographies()
+        if sender is None:
+            return
+
+        self.include_optional = sender.get()
+        self._updateOrthographies()
+
+    def _saveGlyphSelection(self, font=None):
+        if font is None:
+            font = self.font
+        if font:
+            self.selectedGlyphs = font.selectedGlyphNames
+        else:
+            self.selectedGlyphs = ()
+
+    def _restoreGlyphSelection(self, font=None):
+        if font is None:
+            if self.font is None:
+                return
+
+            font = self.font
+        font.selectedGlyphNames = self.selectedGlyphs
 
     def showOrthography(self, sender=None):
         # Callback for the "Show" button of the Orthographies list
-        if sender is not None:
-            i = self.w.orthography_list.get()
-            if i > -1:
-                items = self.w.orthography_list.getItems()
-                if i < len(items):
-                    orthography = self.ortho_list[i]
-                    glyph_list = ["_BASE_"]
+        if sender is None:
+            return
 
-                    base = jkUnicode.get_expanded_glyph_list(
-                        orthography.unicodes_base
+        i = self.w.orthography_list.get()
+        if i < 0:
+            return
+
+        items = self.w.orthography_list.getItems()
+        if i < len(items):
+            if self.font is None:
+                font = CurrentFont()
+            else:
+                font = self.font
+            if font is None:
+                return
+
+            orthography = self.ortho_list[i]
+            glyph_list = ["_BASE_"]
+
+            base = jkUnicode.get_expanded_glyph_list(
+                orthography.unicodes_base
+            )
+            base = get_extra_names(font, base)
+            glyph_list.extend([t[1] for t in sorted(base)])
+
+            punc = jkUnicode.get_expanded_glyph_list(
+                orthography.unicodes_punctuation
+            )
+            punc = get_extra_names(font, punc)
+            glyph_list.append("_PUNCT_")
+            if punc:
+                glyph_list.extend([t[1] for t in sorted(punc)])
+
+            if self.include_optional:
+                optn = jkUnicode.get_expanded_glyph_list(
+                    orthography.unicodes_optional
+                )
+                optn = get_extra_names(font, optn)
+                glyph_list.append("_OPTIONAL_")
+                if optn:
+                    glyph_list.extend(
+                        [
+                            t[1]
+                            for t in sorted(optn)
+                            if not t[1] in glyph_list
+                        ]
                     )
-                    base = get_extra_names(self.font, base)
-                    glyph_list.extend([t[1] for t in sorted(base)])
-
-                    punc = jkUnicode.get_expanded_glyph_list(
-                        orthography.unicodes_punctuation
-                    )
-                    punc = get_extra_names(self.font, punc)
-                    glyph_list.append("_PUNCT_")
-                    if punc:
-                        glyph_list.extend([t[1] for t in sorted(punc)])
-
-                    if self.include_optional:
-                        optn = jkUnicode.get_expanded_glyph_list(
-                            orthography.unicodes_optional
-                        )
-                        optn = get_extra_names(self.font, optn)
-                        glyph_list.append("_OPTIONAL_")
-                        if optn:
-                            glyph_list.extend(
-                                [
-                                    t[1]
-                                    for t in sorted(optn)
-                                    if not t[1] in glyph_list
-                                ]
-                            )
-                    glyph_list.append("_END_")
-                    self.font.glyphOrder = glyph_list
-                # Set the selection to the same index as before
-                self.selectOrthography(sender=None, index=i)
+            glyph_list.append("_END_")
+            self._saveGlyphSelection(font)
+            font.glyphOrder = glyph_list
+            self._restoreGlyphSelection(font)
+        # Set the selection to the same index as before
+        self.selectOrthography(sender=None, index=i)
 
     def showBlock(self, sender=None):
         # Callback for the "Show" button of the Unicode blocks list
-        if sender is not None:
-            i = self.w.block_list.get()
-            if i > 0:
-                items = self.w.block_list.getItems()
-                if i < len(items):
-                    block = items[i]
-                    glyph_list = ["_START_"]
-                    tuples = [
-                        (cp, getGlyphnameForUnicode(cp))
-                        for cp in get_codepoints(block)
-                        if cp in uniName
-                    ]
-                    names = get_extra_names(self.font, tuples)
-                    names.sort()
-                    glyph_list.extend([n[1] for n in names])
-                    glyph_list.append("_END_")
-                    self.font.glyphOrder = glyph_list
+        if sender is None:
+            return
+
+        i = self.w.block_list.get()
+        if i <= 0:
+            return
+
+        items = self.w.block_list.getItems()
+        if i < len(items):
+            if self.font is None:
+                font = CurrentFont()
+            else:
+                font = self.font
+            if font is None:
+                return
+
+            block = items[i]
+            glyph_list = ["_START_"]
+            tuples = [
+                (cp, getGlyphnameForUnicode(cp))
+                for cp in get_codepoints(block)
+                if cp in uniName
+            ]
+            names = get_extra_names(font, tuples)
+            names.sort()
+            glyph_list.extend([n[1] for n in names])
+            glyph_list.append("_END_")
+            self._saveGlyphSelection(font)
+            font.glyphOrder = glyph_list
+            self._restoreGlyphSelection(font)
 
     def toggleCase(self, sender=None):
         if self.view is None or self.font is None:
