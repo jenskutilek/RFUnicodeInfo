@@ -212,7 +212,11 @@ class UnicodeInfoUI(Subscriber, WindowController):
         self._font = value
         if self._font is not None:
             if orth_present:
-                self.ortho.cmap = [g.unicode for g in self.font if g.unicode]
+                cmap = set()
+                for g in self.font:
+                    if g.unicodes:
+                        cmap |= set(g.unicodes)
+                self.ortho.cmap = cmap
 
     def selectOrthography(self, sender=None, index=-1):
         if sender is None:
@@ -225,9 +229,9 @@ class UnicodeInfoUI(Subscriber, WindowController):
             if i < len(self.w.orthography_list.getItems()):
                 self.w.orthography_list.set(i)
                 if self.include_optional:
-                    is_supported = self.ortho_list[i].support_full()
+                    is_supported = self.ortho_list[i].support_full
                 else:
-                    is_supported = self.ortho_list[i].support_basic()
+                    is_supported = self.ortho_list[i].support_basic
                 self.w.orthography_status.set(is_supported)
         else:
             self.w.orthography_status.set(False)
