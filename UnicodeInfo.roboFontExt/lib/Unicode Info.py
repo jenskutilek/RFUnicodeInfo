@@ -5,8 +5,6 @@
 # Version 1.0 by Jens Kutilek 2017-01-19
 # Version 1.2 by Jens Kutilek 2018-03-29
 
-from __future__ import print_function, division, absolute_import
-
 import vanilla
 import jkUnicode
 from glyphNameFormatter import GlyphName
