@@ -51,7 +51,7 @@ def get_extra_names(font, uni_name_tuples):
     ext_map = get_extension_map(font)
     additions = []
     for u, n in uni_name_tuples:
-            additions.extend([(u, e) for e in ext_map.get(n, [])])
+        additions.extend([(u, e) for e in ext_map.get(n, [])])
     uni_name_tuples.extend(additions)
     return list(set(uni_name_tuples))
 
