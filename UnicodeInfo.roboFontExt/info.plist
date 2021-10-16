@@ -30,15 +30,15 @@
 	<key>requiresVersionMinor</key>
 	<string>8</string>
 	<key>timeStamp</key>
-	<real>1522319230.0</real>
+	<real>1634400519.0</real>
 	<key>version</key>
-	<string>2.0.0</string>
+	<string>2.1.0</string>
 	<key>com.robofontmechanic.Mechanic</key>
 	<dict>
 		<key>repository</key>
 		<string>jenskutilek/RFUnicodeInfo</string>
 		<key>summary</key>
-		<string>Display Unicode name, block, and glyph name info in a window.</string>
+		<string>Display Unicode name, block, orthography, and glyph name info in a window.</string>
 	</dict>
 </dict>
 </plist>
