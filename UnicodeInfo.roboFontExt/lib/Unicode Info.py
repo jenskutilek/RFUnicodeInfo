@@ -18,9 +18,7 @@ try:
 except ImportError:
     orth_present = False
 
-from defconAppKit.windows.baseWindow import BaseWindowController
-
-from mojo.events import addObserver, removeObserver
+from mojo.subscriber import Subscriber, WindowController
 from mojo.UI import SetCurrentGlyphByName
 
 
@@ -67,10 +65,8 @@ def get_unicode_for_glyphname(name=None):
     return u
 
 
-class UnicodeInfoUI(BaseWindowController):
-
-    def __init__(self):
-
+class UnicodeInfoUI(Subscriber, WindowController):
+    def build(self):
         width = 320
         if orth_present:
             height = 153
@@ -188,7 +184,7 @@ class UnicodeInfoUI(BaseWindowController):
         self.case = None
         self.view = None
         self.include_optional = False
-        self.font = CurrentFont()
+        self.font = self.glyph.font if self.glyph is not None else None
         self.w.reassign_unicodes.enable(False)
         self.w.block_list.setItems([""] + sorted(uniNameToBlock.keys()))
         self.w.show_block.enable(False)
@@ -202,10 +198,10 @@ class UnicodeInfoUI(BaseWindowController):
                 self.w.include_optional.enable(False)
             else:
                 self.w.include_optional.enable(True)
-        self.setUpBaseWindowBehavior()
+
+    def started(self):
         self.w.open()
         # self._updateInfo()
-        addObserver(self, "_currentGlyphChanged", "currentGlyphChanged")
 
     @property
     def font(self):
@@ -387,10 +383,18 @@ class UnicodeInfoUI(BaseWindowController):
 
         self.selectOrthography(index=new_index)
 
-    def _currentGlyphChanged(self, info):
+    def glyphDidChangeInfo(self, info):
+        # print("glyphDidChangeInfo", info)
+        self._updateGlyph()
+
+    def roboFontDidSwitchCurrentGlyph(self, info):
+        # print("roboFontDidSwitchCurrentGlyph", info)
         self.glyph = info["glyph"]
-        self.view = info["view"]
-        self.font = CurrentFont()
+        self.font = self.glyph.font if self.glyph is not None else None
+        self.view = info["lowLevelEvents"][0]["view"]
+        self._updateGlyph()
+
+    def _updateGlyph(self):
         if self.font is None:
             self.w.reassign_unicodes.enable(False)
             if orth_present:
@@ -512,15 +516,14 @@ class UnicodeInfoUI(BaseWindowController):
                     else:
                         print("<None>", end='')
                     if myUnicode in unicodes:
-                        print("-- Ignored: already in use (/%s)." % unicodes[myUnicode])
+                        print(
+                            "-- Ignored: already in use (/%s)." % unicodes[myUnicode]
+                        )
                     else:
                         print()
                         g.unicode = myUnicode
                         unicodes[myUnicode] = g.name
 
-    def windowCloseCallback(self, sender):
-        removeObserver(self, "currentGlyphChanged")
-        super(UnicodeInfoUI, self).windowCloseCallback(sender)
 
-
-OpenWindow(UnicodeInfoUI)
+if __name__ == "__main__":
+    UnicodeInfoUI(currentGlyph=True)
