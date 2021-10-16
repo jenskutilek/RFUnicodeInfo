@@ -504,6 +504,7 @@ class UnicodeInfoUI(Subscriber, WindowController):
 
     def showBlock(self, sender=None):
         # Callback for the "Show" button of the Unicode blocks list
+        show_Reserved = True
         if sender is None:
             return
 
@@ -525,7 +526,7 @@ class UnicodeInfoUI(Subscriber, WindowController):
             tuples = [
                 (cp, getGlyphnameForUnicode(cp))
                 for cp in get_codepoints(block)
-                if cp in uniName
+                if show_Reserved or cp in uniName
             ]
             names = get_extra_names(font, tuples)
             names.sort()
