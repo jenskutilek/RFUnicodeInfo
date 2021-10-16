@@ -26,7 +26,7 @@
 		<p>Unicode Info is a floating window that displays various bits of information about the current glyph, like expected glyph name, Unicode, and Unicode block. It has buttons to jump to the corresponding upper- or lowercase letter, show any Unicode block in your font to find any missing glyphs, and to assign Unicodes to all glyphs in the current font.</p>
 		
 		<h2>Interface</h2>
-		<p><img src="dialog.png" width="354" height="150" alt=""></p>
+		<p><img src="dialog.png" width="354" height="187" alt=""></p>
 		
 		<h2>Buttons</h2>
 		<table>
@@ -46,12 +46,17 @@
 				<td>Jump to the uppercase or lowercase version of the current glyph. Not all glyphs have upper- or lowercase mappings.</td>
 			</tr>
 			<tr>
-				<td>Show</td>
+				<td>Show (Block)</td>
 				<td>—</td>
-				<td>Show the selected Unicode block in the current font. Between start and end marker glyphs, all glyphs for the selected block will be added to the glyph order. Missing glyphs will be shown empty or as template glyphs. Undefined codepoints are omitted.</td>
+				<td>Show the selected Unicode block in the current font. Between start and end marker glyphs, all glyphs for the selected block will be added to the glyph order. Missing glyphs will be shown empty or as template glyphs. Undefined codepoints are included.</td>
+			</tr>
+			<tr>
+				<td>Show (Usage)</td>
+				<td>—</td>
+				<td>Show all glyphs for the selected orthography in the current font. The different levels of support are marked by glyphs called _BASE_ for required letters, _PUNCT_ for punctuation, and, if you have checked the <em>Include optional characters</em> checkbox, _OPTIONAL_. Between start and end marker glyphs, all glyphs for the selected block will be added to the glyph order. Missing glyphs will be shown empty or as template glyphs. Data is based on the Unicode <em>Common Locale Data Repository.</em></td>
 			</tr>
 		</table>
 		<hr>
-		<p>Unicode Info is © 2017 by Jens Kutilek.</p>
+		<p>Unicode Info is © 2017–2021 by Jens Kutilek.</p>
 	</body>
 </html>
