@@ -4,6 +4,9 @@
 		<title>Anchor Overlay Help</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<style type="text/css">
+			body {
+				font-family: -apple-system, 'Helvetica Neue', sans-serif;
+			}
 			table {
 				border-collapse: collapse;
 			}
@@ -18,6 +21,9 @@
 			}
 			td {
 				border-top: 1px solid #404040;
+			}
+			td.button {
+				white-space: nowrap;
 			}
 		</style>
 	</head>
@@ -36,22 +42,22 @@
 				<th>Description</th>
 			</tr>
 			<tr>
-				<td>Assign All</td>
+				<td class="button">Assign All</td>
 				<td>—</td>
 				<td>Assign Unicode values to all glyphs in the current font. Glyph names are parsed according to the AGLFN and GNFUL.</td>
 			</tr>
 			<tr>
-				<td>Case</td>
+				<td class="button">↑ ↓ Case</td>
 				<td>—</td>
 				<td>Jump to the uppercase or lowercase version of the current glyph. Not all glyphs have upper- or lowercase mappings.</td>
 			</tr>
 			<tr>
-				<td>Show (Block)</td>
+				<td class="button">Show (Block)</td>
 				<td>—</td>
 				<td>Show the selected Unicode block in the current font. Between start and end marker glyphs, all glyphs for the selected block will be added to the glyph order. Missing glyphs will be shown empty or as template glyphs. Undefined codepoints are included.</td>
 			</tr>
 			<tr>
-				<td>Show (Usage)</td>
+				<td class="button">Show (Usage)</td>
 				<td>—</td>
 				<td>Show all glyphs for the selected orthography in the current font. The different levels of support are marked by glyphs called _BASE_ for required letters, _PUNCT_ for punctuation, and, if you have checked the <em>Include optional characters</em> checkbox, _OPTIONAL_. Between start and end marker glyphs, all glyphs for the selected block will be added to the glyph order. Missing glyphs will be shown empty or as template glyphs. Data is based on the Unicode <em>Common Locale Data Repository.</em></td>
 			</tr>
