@@ -40,6 +40,20 @@ class UnicodeInfoUI(UnicodeInfoWindow, Subscriber, WindowController):
 
         return self._glyph.font
 
+    @property
+    def glyph_unicode(self):
+        if self._glyph is None:
+            return None
+        if self._glyph.unicode is None:
+            return None
+
+        return self._glyph.unicode
+
+    def glyphs_for_font(self, font):
+        if font is None:
+            return {}
+        return self._font
+
     def get_unicode_for_glyphname(self, name=None):
         if name is None:
             return None
