@@ -10,6 +10,8 @@ from jkUnicode.uniName import uniName
 class UnicodeInfoWindow(object):
     @objc.python_method
     def build_window(self):
+        self._font = None
+        self._glyph = None
         from vanilla import (
             Button,
             CheckBox,

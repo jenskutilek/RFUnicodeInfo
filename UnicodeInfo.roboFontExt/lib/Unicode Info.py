@@ -12,14 +12,15 @@ from lib.tools.unicodeTools import getGlyphNameComponentUnicode
 from jkUnicode.aglfn import getGlyphnameForUnicode, getUnicodeForGlyphname
 from unicodeInfoWindow import UnicodeInfoWindow
 
+from mojo.roboFont import CurrentFont, CurrentGlyph
 from mojo.subscriber import Subscriber, WindowController
 from mojo.UI import SetCurrentGlyphByName
 
 
 class UnicodeInfoUI(UnicodeInfoWindow, Subscriber, WindowController):
     def build(self):
-        self.glyph = CurrentGlyph()
         self.build_window()
+        self.glyph = CurrentGlyph()
 
     @property
     def font_fallback(self):
