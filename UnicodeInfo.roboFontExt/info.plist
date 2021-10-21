@@ -26,13 +26,13 @@
 	<key>name</key>
 	<string>Unicode Info</string>
 	<key>requiresVersionMajor</key>
-	<string>1</string>
+	<string>4</string>
 	<key>requiresVersionMinor</key>
-	<string>8</string>
+	<string>0</string>
 	<key>timeStamp</key>
-	<real>1634400519.0</real>
+	<real>1634808163.0</real>
 	<key>version</key>
-	<string>2.1.0</string>
+	<string>2.1.1</string>
 	<key>com.robofontmechanic.Mechanic</key>
 	<dict>
 		<key>repository</key>
