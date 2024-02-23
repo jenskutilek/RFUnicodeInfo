@@ -17,33 +17,38 @@ from mojo.roboFont import CurrentFont, CurrentGlyph
 from mojo.subscriber import Subscriber, WindowController
 from mojo.UI import SetCurrentGlyphByName
 
+from typing import TYPE_CHECKING, Dict, Iterable, List
+
+if TYPE_CHECKING:
+    from jkTypes import Font, Glyph
+
 
 class UnicodeInfoUI(UnicodeInfoWindow, Subscriber, WindowController):
-    def build(self):
+    def build(self) -> None:
         self.build_window(manual_update=True)
         self.glyph = CurrentGlyph()
 
     @property
-    def font_fallback(self):
+    def font_fallback(self) -> Font:
         if self._font is not None:
             return self._font
         return CurrentFont()
 
     @property
-    def font_glyphs(self):
+    def font_glyphs(self) -> List[Glyph]:
         if self._font is not None:
             return self._font
         return []
 
     @property
-    def glyph_font(self):
+    def glyph_font(self) -> Font | None:
         if self._glyph is None:
             return None
 
         return self._glyph.font
 
     @property
-    def glyph_unicode(self):
+    def glyph_unicode(self) -> int | None:
         if self._glyph is None:
             return None
         if self._glyph.unicode is None:
@@ -51,12 +56,13 @@ class UnicodeInfoUI(UnicodeInfoWindow, Subscriber, WindowController):
 
         return self._glyph.unicode
 
-    def glyphs_for_font(self, font):
+    def glyphs_for_font(self, font: Font | None) -> Dict[str, Glyph]:
+        # FIXME
         if font is None:
             return {}
         return self._font
 
-    def get_unicode_for_glyphname(self, name=None):
+    def get_unicode_for_glyphname(self, name=None) -> int | None:
         if name is None:
             return None
         # First try jkUnicode
@@ -68,27 +74,27 @@ class UnicodeInfoUI(UnicodeInfoWindow, Subscriber, WindowController):
                 u = u[1]
         return u
 
-    def gnful_name(self, u):
+    def gnful_name(self, u) -> str | None:
         return GlyphName(uniNumber=u).getName()
 
-    def glyphDidChangeInfo(self, info):
+    def glyphDidChangeInfo(self, info) -> None:
         # print("glyphDidChangeInfo", info)
         self._updateGlyph()
 
-    # def currentGlyphDidSetGlyph(self, info):
+    # def currentGlyphDidSetGlyph(self, info) -> None:
     #     print("currentGlyphDidSetGlyph", info)
     #     self.glyph = info["glyph"]
     #     self.font = self.glyph.font if self.glyph is not None else None
     #     self.view = info["lowLevelEvents"]["view"]
     #     self._updateGlyph()
 
-    def roboFontDidSwitchCurrentGlyph(self, info):
+    def roboFontDidSwitchCurrentGlyph(self, info) -> None:
         self.glyph = info["glyph"]
         self.font = self.glyph.font if self.glyph is not None else None
         self.view = info["lowLevelEvents"][0]["view"]
         self._updateGlyph()
 
-    def _saveGlyphSelection(self, font=None):
+    def _saveGlyphSelection(self, font: Font | None = None) -> None:
         if font is None:
             font = self.font
         if font:
@@ -96,18 +102,21 @@ class UnicodeInfoUI(UnicodeInfoWindow, Subscriber, WindowController):
         else:
             self.selectedGlyphs = ()
 
-    def _showGlyphList(self, font, glyph_list):
+    def _showGlyphList(self, font: Font, glyph_list: Iterable[str]) -> None:
         font.glyphOrder = glyph_list
 
-    def _restoreGlyphSelection(self, font=None):
+    def _restoreGlyphSelection(self, font: Font | None = None) -> None:
         if font is None:
             if self.font is None:
                 return
 
             font = self.font
+        if font is None:
+            return
+
         font.selectedGlyphNames = self.selectedGlyphs
 
-    def toggleCase(self, sender=None):
+    def toggleCase(self, sender=None) -> None:
         if self.font is None:
             return
 
