@@ -719,3 +719,25 @@ class UnicodeInfoWindow:
                         print()
                         g.unicode = myUnicode
                         unicodes[myUnicode] = g.name
+
+    # Editor-specific stuff
+
+    @property
+    def in_font_view(self):
+        return False
+
+    @objc.python_method
+    def _saveGlyphSelection(self, font) -> None:
+        pass
+
+    @objc.python_method
+    def _showGlyphList(self, font, glyph_list) -> None:
+        pass
+
+    @objc.python_method
+    def _resetFilter(self, sender) -> None:
+        pass
+
+    @objc.python_method
+    def _restoreGlyphSelection(self, font) -> None:
+        pass

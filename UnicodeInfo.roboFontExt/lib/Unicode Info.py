@@ -119,15 +119,6 @@ class UnicodeInfoUI(UnicodeInfoWindow, Subscriber, WindowController):
             # Show the cased glyph in the Glyph Window
             SetCurrentGlyphByName(glyphname)
 
-    # Only used in Glyphs
-
-    @property
-    def in_font_view(self):
-        return False
-
-    def _resetFilter(self, sender) -> None:
-        pass
-
 
 if __name__ == "__main__":
     UnicodeInfoUI(currentGlyph=True)
