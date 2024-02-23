@@ -1,7 +1,7 @@
-from .tools.helpers import RangeDict
-from .uniBlockData import uniBlocks
+import jkUnicode.tools.helpers
+from jkUnicode.uniBlockData import uniBlocks
 
-uniBlockToName = RangeDict(uniBlocks)
+uniBlockToName = jkUnicode.tools.helpers.RangeDict(uniBlocks)
 
 # The reverse mapping of names to blocks
 uniNameToBlock = {}
@@ -35,7 +35,7 @@ def get_codepoints(block_name):
 
 
 if __name__ == "__main__":
-    print(get_block(0x4ff))
+    print(get_block(0x4FF))
     print(get_block(0x500))
     print(get_codepoints_min_max("Cyrillic Supplement"))
     print(get_codepoints("Cyrillic Supplement"))

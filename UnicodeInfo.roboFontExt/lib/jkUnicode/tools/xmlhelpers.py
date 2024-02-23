@@ -1,72 +1,65 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 # The dirty hacky stuff is outsourced into this file
 
 from re import compile
 from jkUnicode import getUnicodeChar
 
-ur = compile("^u([0-9A-F]+)")  # Regex to match unicode sequences, e.g. \u0302
+from typing import Any, List
+
+# Regex to match unicode sequences, e.g. \u0302
+unicode_seq = compile("^u([0-9A-F]+)")
 
 
-class Buffer(object):
-    def __init__(self, string=u""):
+class Buffer:
+    def __init__(self, string: str = "") -> None:
         self._str = string
 
-    def add(self, value):
+    def add(self, value: str) -> None:
         self._str += value
 
-    def clear(self):
-        self._str = u""
+    def clear(self) -> None:
+        self._str = ""
 
-    def flush(self):
+    def flush(self) -> str:
         v = self.__get__()
         self.clear()
         return v
 
-    def __get__(self):
-        m = ur.search(self._str)
-        if m:
-            return getUnicodeChar(int(m.groups(0)[0], 16))
-        else:
+    def __get__(self) -> str:
+        m = unicode_seq.search(self._str)
+        if m is None:
             return self._str
 
-    def __repr__(self):
+        group = str(m.groups(0)[0])
+        return getUnicodeChar(int(group, 16))
+
+    def __repr__(self) -> str:
         return self._str
 
 
-class FilteredList(object):
-    def __init__(self, value=[]):
-        self._value = []
+class FilteredList:
+    def __init__(self) -> None:
+        self._value: List[Any] = []
 
-    def add(self, value):
+    def add(self, value: Any) -> None:
         if value:
             self._value.append(value)
 
-    def get(self):
+    def get(self) -> Any:
         return self._value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self._value)
 
 
-def filtered_char_list(xml_char_list, debug=False):
-    # Filter backslashes and other peculiarities of the XML format from the
-    # character list
-    if xml_char_list[0] == "[" and xml_char_list[-1] == "]":
-        xml_char_list = xml_char_list[1:-1]
-    else:
-        print("ERROR: Character list string from XML was not wrapped in [].")
-        return []
-
+def unescape_char_list(xml_char_list: str):
     filtered = FilteredList()
     in_escape = False
     in_uniesc = False
     buf = Buffer()
 
     for c in xml_char_list:
-        if debug:
-            print("Chunk: '%s', buffer:'%s'" % (c, buf))
+        # if debug:
+        #     print("Chunk: '%s', buffer:'%s'" % (c, buf))
         if in_uniesc:
             if c in "\\}{- ":
                 filtered.add(buf.flush())
@@ -112,25 +105,38 @@ def filtered_char_list(xml_char_list, debug=False):
                 else:
                     filtered.add(c)
             else:
-                if c == u"\u2010":
+                if c == "\u2010":
                     c = "-"  # Replace proper hyphen by hyphen-minus
                 if in_escape:
                     in_escape = False
                 filtered.add(c)
                 buf.clear()
-            if debug:
-                print("New buffer: '%s'" % buf)
+            # if debug:
+            #     print("New buffer: '%s'" % buf)
 
     filtered.add(buf.flush())
 
-    filtered = filtered.get()
+    return filtered.get()
+
+
+def filtered_char_list(xml_char_list: str, debug: bool = False) -> List[str]:
+    # Filter backslashes and other peculiarities of the XML format from the
+    # character list
+    if xml_char_list[0] == "[" and xml_char_list[-1] == "]":
+        xml_char_list = xml_char_list[1:-1]
+    else:
+        print("ERROR: Character list string from XML was not wrapped in [].")
+        return []
+
+    result = unescape_char_list(xml_char_list)
 
     # Expand ranges
     final = []
-    for i, f in enumerate(filtered):
+    f: str
+    for i, f in enumerate(result):
         if f == "RANGE":
-            start = ord(filtered[i - 1]) + 1
-            end = ord(filtered[i + 1])
+            start = ord(result[i - 1]) + 1
+            end = ord(result[i + 1])
             # print("RANGE: %04X, %04X" % (start, end))
             for g in range(start, end):
                 # print("0x%04X" % g)
@@ -146,26 +152,26 @@ def filtered_char_list(xml_char_list, debug=False):
 if __name__ == "__main__":
     lists = [
         (
-            u"[\\u200C\\u200D-\\u200F A {A\\u0301} {E \\u0302} {ij} {a b c} 未-札 \\]]",
+            "[\\u200C\\u200D-\\u200F A {A\\u0301} {E \\u0302} {ij} {a b c} 未-札 \\]]",
             [
-                u"A",
-                u"E",
-                u"]",
-                u"a",
-                u"b",
-                u"c",
-                u"i",
-                u"j",
-                u"\u0301",
-                u"\u0302",
-                u"\u200c",
-                u"\u200d",
-                u"\u200e",
-                u"\u200f",
-                u"\u672a",
-                u"\u672b",
-                u"\u672c",
-                u"\u672d",
+                "A",
+                "E",
+                "]",
+                "a",
+                "b",
+                "c",
+                "i",
+                "j",
+                "\u0301",
+                "\u0302",
+                "\u200c",
+                "\u200d",
+                "\u200e",
+                "\u200f",
+                "\u672a",
+                "\u672b",
+                "\u672c",
+                "\u672d",
             ],
         )
         # (u"[á à ã {ą\\u0301} {ą\\u0303} {ch} {dz} {dž} é è ẽ {ę\\u0301} {ę\\u0303} {ė\\u0301} {ė\\u0303} {i\\u0307\\u0301}í {i\\u0307\\u0300}ì {i\\u0307\\u0303}ĩ {į\\u0301}{į\\u0307\\u0301} {į\\u0303}{į\\u0307\\u0303} {j\\u0303}{j\\u0307\\u0303} {l\\u0303} {m\\u0303} ñ ó ò õ q {r\\u0303} ú ù ũ {ų\\u0301} {ų\\u0303} {ū\\u0301} {ū\\u0303} w x]", [u'c', u'd', u'h', u'i', u'j', u'l', u'm', u'q', u'r', u'w', u'x', u'z', u'\xe0', u'\xe1', u'\xe3', u'\xe8', u'\xe9', u'\xec', u'\xed', u'\xf1', u'\xf2', u'\xf3', u'\xf5', u'\xf9', u'\xfa', u'\u0105', u'\u0117', u'\u0119', u'\u0129', u'\u012f', u'\u0169', u'\u016b', u'\u0173', u'\u017e', u'\u0300', u'\u0301', u'\u0303', u'\u0307', u'\u1ebd'])
