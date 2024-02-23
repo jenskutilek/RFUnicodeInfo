@@ -712,6 +712,14 @@ class UnicodeInfoWindow:
         return False
 
     @objc.python_method
+    def _addMissingBlock(self, block) -> None:
+        pass
+
+    @objc.python_method
+    def _addMissingOrthography(self, ort) -> None:
+        pass
+
+    @objc.python_method
     def _saveGlyphSelection(self, font) -> None:
         pass
 
@@ -726,3 +734,7 @@ class UnicodeInfoWindow:
     @objc.python_method
     def _restoreGlyphSelection(self, font) -> None:
         pass
+
+    @objc.python_method
+    def gnful_name(self, u) -> str:
+        return ".notdef"
