@@ -10,9 +10,7 @@ from jkUnicode.uniName import uniName
 
 class UnicodeInfoWindow(object):
     @objc.python_method
-    def build_window(self):
-        self._font = None
-        self._glyph = None
+    def build_window(self, manual_update=False):
         from vanilla import (
             Button,
             CheckBox,
@@ -20,6 +18,7 @@ class UnicodeInfoWindow(object):
             PopUpButton,
             TextBox,
         )
+
         try:
             from jkUnicode.orthography import OrthographyInfo
 
@@ -28,10 +27,14 @@ class UnicodeInfoWindow(object):
             self.orth_present = False
 
         width = 320
+        height = 116
+
         if self.orth_present:
-            height = 153
-        else:
-            height = 116
+            height += 37
+        if manual_update:
+            # Make room for an additional button
+            height += 22
+
         ini_height = height - 16
         axis = 50
 
@@ -107,6 +110,20 @@ class UnicodeInfoWindow(object):
                 (axis, y, 200, 20),
                 "Include optional characters",
                 callback=self.includeOptional,
+                sizeStyle="small",
+            )
+        if manual_update:
+            y += 24
+            self.w.reset_filter = Button(
+                (-146, y - 6, -68, 25),
+                "Reset filter",
+                callback=self.resetFilter,
+                sizeStyle="small",
+            )
+            self.w.manual_update = Button(
+                (-60, y - 6, -10, 25),
+                "Query",
+                callback=self.updateInfo,
                 sizeStyle="small",
             )
 
@@ -295,6 +312,11 @@ class UnicodeInfoWindow(object):
             self.w.show_block.enable(True)
             # Show supported status for block
             # self.w.orthography_status.set(is_supported)
+
+    @objc.python_method
+    def updateInfo(self, sender):
+        # Is called when the info is updated manually
+        pass
 
     @objc.python_method
     def _updateInfo(self, u=None, fake=False):

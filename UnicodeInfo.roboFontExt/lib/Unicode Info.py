@@ -20,7 +20,7 @@ from mojo.UI import SetCurrentGlyphByName
 
 class UnicodeInfoUI(UnicodeInfoWindow, Subscriber, WindowController):
     def build(self):
-        self.build_window()
+        self.build_window(manual_update=True)
         self.glyph = CurrentGlyph()
 
     @property
