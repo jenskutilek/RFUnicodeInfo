@@ -96,6 +96,9 @@ class UnicodeInfoUI(UnicodeInfoWindow, Subscriber, WindowController):
         else:
             self.selectedGlyphs = ()
 
+    def _showGlyphList(self, font, glyph_list):
+        font.glyphOrder = glyph_list
+
     def _restoreGlyphSelection(self, font=None):
         if font is None:
             if self.font is None:
