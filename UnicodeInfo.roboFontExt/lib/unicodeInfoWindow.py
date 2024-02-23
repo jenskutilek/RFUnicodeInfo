@@ -45,16 +45,10 @@ class UnicodeInfoWindow(object):
         self.w.uni_name_label = TextBox(
             (8, y, axis - 10, 20), "Name", sizeStyle="small"
         )
-        self.w.uni_name = TextBox(
-            (axis, y, -10, 20), u"", sizeStyle="small"
-        )
+        self.w.uni_name = TextBox((axis, y, -10, 20), "", sizeStyle="small")
         y += 20
-        self.w.code_label = TextBox(
-            (8, y, axis - 10, 20), "Code", sizeStyle="small"
-        )
-        self.w.code = TextBox(
-            (axis, y, -10, 20), u"", sizeStyle="small"
-        )
+        self.w.code_label = TextBox((8, y, axis - 10, 20), "Code", sizeStyle="small")
+        self.w.code = TextBox((axis, y, -10, 20), "", sizeStyle="small")
         self.w.reassign_unicodes = Button(
             (-81, y - 6, -10, 25),
             "Assign All",
@@ -65,28 +59,22 @@ class UnicodeInfoWindow(object):
         self.w.glyph_name_label = TextBox(
             (8, y, axis - 10, 20), "Glyph", sizeStyle="small"
         )
-        self.w.glyph_name = TextBox(
-            (axis, y, -10, 20), u"", sizeStyle="small"
-        )
+        self.w.glyph_name = TextBox((axis, y, -10, 20), "", sizeStyle="small")
         self.w.case = Button(
             (-81, y - 6, -10, 25),
-            u"\u2191 \u2193 Case",
+            "\u2191 \u2193 Case",
             callback=self.toggleCase,
             sizeStyle="small",
         )
         y += 20
-        self.w.block_label = TextBox(
-            (8, y, axis - 10, 20), "Block", sizeStyle="small"
-        )
+        self.w.block_label = TextBox((8, y, axis - 10, 20), "Block", sizeStyle="small")
         self.w.block_list = PopUpButton(
             (axis, y - 4, -90, 20),
             [],
             callback=self.selectBlock,
             sizeStyle="small",
         )
-        self.w.block_status = CheckBox(
-            (-80, y - 3, -70, 20), "", sizeStyle="small"
-        )
+        self.w.block_status = CheckBox((-80, y - 3, -70, 20), "", sizeStyle="small")
         self.w.show_block = Button(
             (-60, y - 6, -10, 25),
             "Show",
@@ -217,7 +205,11 @@ class UnicodeInfoWindow(object):
     @objc.python_method
     def get_extensions(self, font):
         # Return all used glyph name extensions in the font
-        return [n.split(".", 1)[1] for n in self.glyphs_for_font(font).keys() if "." in n[1:]]
+        return [
+            n.split(".", 1)[1]
+            for n in self.glyphs_for_font(font).keys()
+            if "." in n[1:]
+        ]
 
     @objc.python_method
     def get_extension_map(self, font):
@@ -298,7 +290,7 @@ class UnicodeInfoWindow(object):
     def _updateInfo(self, u=None, fake=False):
         self._updateBlock(u)
         if u is None:
-            self.w.uni_name.set(u"❓")
+            self.w.uni_name.set("❓")
             self.w.code.set("")
             if self.glyph is None:
                 self.w.glyph_name.set("")
@@ -391,9 +383,7 @@ class UnicodeInfoWindow(object):
                 self.ortho_list = [
                     o
                     for o in sorted(
-                        self.ortho.get_orthographies_for_unicode_any(
-                            self.unicode
-                        )
+                        self.ortho.get_orthographies_for_unicode_any(self.unicode)
                     )
                 ]
             else:
@@ -500,33 +490,23 @@ class UnicodeInfoWindow(object):
             orthography = self.ortho_list[i]
             glyph_list = ["_BASE_"]
 
-            base = jkUnicode.get_expanded_glyph_list(
-                orthography.unicodes_base
-            )
+            base = jkUnicode.get_expanded_glyph_list(orthography.unicodes_base)
             base = self.get_extra_names(font, base)
             glyph_list.extend([t[1] for t in sorted(base)])
 
-            punc = jkUnicode.get_expanded_glyph_list(
-                orthography.unicodes_punctuation
-            )
+            punc = jkUnicode.get_expanded_glyph_list(orthography.unicodes_punctuation)
             punc = self.get_extra_names(font, punc)
             glyph_list.append("_PUNCT_")
             if punc:
                 glyph_list.extend([t[1] for t in sorted(punc)])
 
             if self.include_optional:
-                optn = jkUnicode.get_expanded_glyph_list(
-                    orthography.unicodes_optional
-                )
+                optn = jkUnicode.get_expanded_glyph_list(orthography.unicodes_optional)
                 optn = self.get_extra_names(font, optn)
                 glyph_list.append("_OPTIONAL_")
                 if optn:
                     glyph_list.extend(
-                        [
-                            t[1]
-                            for t in sorted(optn)
-                            if not t[1] in glyph_list
-                        ]
+                        [t[1] for t in sorted(optn) if not t[1] in glyph_list]
                     )
             glyph_list.append("_END_")
             self._saveGlyphSelection(font)
@@ -588,10 +568,7 @@ class UnicodeInfoWindow(object):
                     else:
                         print("<None>", end="")
                     if myUnicode in unicodes:
-                        print(
-                            "-- Ignored: already in use (/%s)."
-                            % unicodes[myUnicode]
-                        )
+                        print("-- Ignored: already in use (/%s)." % unicodes[myUnicode])
                     else:
                         print()
                         g.unicode = myUnicode
