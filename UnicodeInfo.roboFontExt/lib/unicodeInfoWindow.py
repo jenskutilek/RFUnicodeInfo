@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 import jkUnicode
 import objc
 
@@ -19,6 +20,7 @@ class UnicodeInfoWindow(object):
             PopUpButton,
             TextBox,
         )
+
         try:
             from jkUnicode.orthography import OrthographyInfo
 
@@ -319,11 +321,10 @@ class UnicodeInfoWindow(object):
 
             # Glyph name
             if self.glyph.name == self.info.glyphname:
-                self.w.glyph_name.set(u"😀 %s" % self.info.glyphname)
+                self.w.glyph_name.set("😀 %s" % self.info.glyphname)
             elif self.glyph.name == self.gnful_name(u):
                 self.w.glyph_name.set(
-                    "😀 %s (Product: %s)"
-                    % (self.gnful_name(u), self.info.glyphname)
+                    "😀 %s (Product: %s)" % (self.gnful_name(u), self.info.glyphname)
                 )
             else:
                 self.w.glyph_name.set(
