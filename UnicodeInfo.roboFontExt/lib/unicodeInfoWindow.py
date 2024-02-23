@@ -19,18 +19,9 @@ class UnicodeInfoWindow:
             TextBox,
         )
 
-        try:
-            from jkUnicode.orthography import OrthographyInfo
-
-            self.orth_present = True
-        except ImportError:
-            self.orth_present = False
-
         width = 320
-        height = 116
+        height = 153
 
-        if self.orth_present:
-            height += 37
         if manual_update:
             # Make room for an additional button
             height += 22
@@ -85,33 +76,33 @@ class UnicodeInfoWindow:
             callback=self.showBlock,
             sizeStyle="small",
         )
-        if self.orth_present:
-            y += 20
-            self.w.orthography_label = TextBox(
-                (8, y, axis - 10, 20), "Usage", sizeStyle="small"
-            )
-            self.w.orthography_list = PopUpButton(
-                (axis, y - 4, -90, 20),
-                [],
-                callback=self.selectOrthography,
-                sizeStyle="small",
-            )
-            self.w.orthography_status = CheckBox(
-                (-80, y - 3, -70, 20), "", sizeStyle="small"
-            )
-            self.w.show_orthography = Button(
-                (-60, y - 6, -10, 25),
-                "Show",
-                callback=self.showOrthography,
-                sizeStyle="small",
-            )
-            y += 20
-            self.w.include_optional = CheckBox(
-                (axis, y, 200, 20),
-                "Include optional characters",
-                callback=self.includeOptional,
-                sizeStyle="small",
-            )
+
+        y += 20
+        self.w.orthography_label = TextBox(
+            (8, y, axis - 10, 20), "Usage", sizeStyle="small"
+        )
+        self.w.orthography_list = PopUpButton(
+            (axis, y - 4, -90, 20),
+            [],
+            callback=self.selectOrthography,
+            sizeStyle="small",
+        )
+        self.w.orthography_status = CheckBox(
+            (-80, y - 3, -70, 20), "", sizeStyle="small"
+        )
+        self.w.show_orthography = Button(
+            (-60, y - 6, -10, 25),
+            "Show",
+            callback=self.showOrthography,
+            sizeStyle="small",
+        )
+        y += 20
+        self.w.include_optional = CheckBox(
+            (axis, y, 200, 20),
+            "Include optional characters",
+            callback=self.includeOptional,
+            sizeStyle="small",
+        )
         if manual_update:
             y += 24
             self.w.block_add_missing = Button(
@@ -141,9 +132,8 @@ class UnicodeInfoWindow:
 
         self.info = UniInfo(0)
         self.unicode = None
-        if self.orth_present:
-            self.ortho = OrthographyInfo(ui=self.info)
-            self.ortho_list = []
+        self.ortho = OrthographyInfo(ui=self.info)
+        self.ortho_list = []
         self.case = None
         self.view = None
         self.selectedGlyphs = ()
@@ -159,14 +149,13 @@ class UnicodeInfoWindow:
             self.w.orthography_add_missing.enable(False)
             self.w.reset_filter.enable(False)
 
-        if self.orth_present:
-            # self.w.orthography_list.enable(False)
-            self.w.show_orthography.enable(False)
-            self.w.orthography_status.enable(False)
-            # if self.font is None:
-            #     self.w.include_optional.enable(False)
-            # else:
-            #     self.w.include_optional.enable(True)
+        # self.w.orthography_list.enable(False)
+        self.w.show_orthography.enable(False)
+        self.w.orthography_status.enable(False)
+        # if self.font is None:
+        #     self.w.include_optional.enable(False)
+        # else:
+        #     self.w.include_optional.enable(True)
 
     @objc.python_method
     def build(self):
@@ -485,8 +474,6 @@ class UnicodeInfoWindow:
 
     @objc.python_method
     def _updateOrthographies(self):
-        if not self.orth_present:
-            return
         # Save the old selection from the orthography list
         old_index = self.w.orthography_list.get()
         if old_index > -1:
@@ -535,13 +522,11 @@ class UnicodeInfoWindow:
     def _updateGlyph(self):
         if self.font is None:
             self.w.reassign_unicodes.enable(False)
-            if self.orth_present:
-                self.w.include_optional.enable(False)
+            self.w.include_optional.enable(False)
             self.w.show_block.enable(False)
         else:
             self.w.reassign_unicodes.enable(True)
-            if self.orth_present:
-                self.w.include_optional.enable(True)
+            self.w.include_optional.enable(True)
             self.w.show_block.enable(True)
         if self.glyph is None:
             self._updateInfo(None)
