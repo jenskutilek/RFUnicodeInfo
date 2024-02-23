@@ -463,24 +463,6 @@ class UnicodeInfoWindow(object):
         self.include_optional = sender.get()
         self._updateOrthographies()
 
-    # @objc.python_method
-    # def _saveGlyphSelection(self, font=None):
-    #     if font is None:
-    #         font = self.font
-    #     if font:
-    #         self.selectedGlyphs = font.selectedGlyphNames
-    #     else:
-    #         self.selectedGlyphs = ()
-
-    # @objc.python_method
-    # def _restoreGlyphSelection(self, font=None):
-    #     if font is None:
-    #         if self.font is None:
-    #             return
-
-    #         font = self.font
-    #     font.selectedGlyphNames = self.selectedGlyphs
-
     @objc.python_method
     def showOrthography(self, sender=None):
         # Callback for the "Show" button of the Orthographies list
