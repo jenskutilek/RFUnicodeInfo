@@ -238,6 +238,15 @@ class UnicodeInfoWindow(object):
         return list(set(uni_name_tuples))
 
     @objc.python_method
+    def get_glyphname_for_unicode(self, value=None):
+        if value is None:
+            return None
+        # from jkUnicode
+        name = getGlyphnameForUnicode(value)
+        alt = self.gnful_name(value)
+        return (name, alt)
+
+    @objc.python_method
     def get_unicode_for_glyphname(self, name=None):
         if name is None:
             return None
@@ -319,18 +328,18 @@ class UnicodeInfoWindow(object):
                     self.w.code.set("😡 %04X → %04X" % (self.glyph_unicode, u))
 
             # Glyph name
-            if self.glyph.name == self.info.glyphname:
-                self.w.glyph_name.set(u"😀 %s" % self.info.glyphname)
-            elif self.glyph.name == self.gnful_name(u):
-                self.w.glyph_name.set(
-                    "😀 %s (Product: %s)"
-                    % (self.gnful_name(u), self.info.glyphname)
-                )
+            expected_name, alt_name = self.get_glyphname_for_unicode(u)
+            if self.glyph.name == expected_name:
+                self.w.glyph_name.set(f"😀 {expected_name}")
+            elif alt_name is not None and self.glyph.name == alt_name:
+                self.w.glyph_name.set(f"😀 {alt_name} (Product: {expected_name})")
             else:
-                self.w.glyph_name.set(
-                    "😡 %s → %s or %s"
-                    % (self.glyph.name, self.gnful_name(u), self.info.glyphname)
-                )
+                if alt_name is None:
+                    self.w.glyph_name.set(f"😡 {self.glyph.name} → {expected_name}")
+                else:
+                    self.w.glyph_name.set(
+                        f"😡 {self.glyph.name} → {expected_name} or {alt_name}"
+                    )
 
             # Case mapping
             lc = self.info.lc_mapping
@@ -511,7 +520,7 @@ class UnicodeInfoWindow(object):
                     )
             glyph_list.append("_END_")
             self._saveGlyphSelection(font)
-            font.glyphOrder = glyph_list
+            self._showGlyphList(font, glyph_list)
             self._restoreGlyphSelection(font)
         # Set the selection to the same index as before
         self.selectOrthography(sender=None, index=i)
@@ -536,7 +545,7 @@ class UnicodeInfoWindow(object):
             block = items[i]
             glyph_list = ["_START_"]
             tuples = [
-                (cp, getGlyphnameForUnicode(cp))
+                (cp, self.get_glyphname_for_unicode(cp)[0])
                 for cp in get_codepoints(block)
                 if show_Reserved or cp in uniName
             ]
@@ -545,7 +554,7 @@ class UnicodeInfoWindow(object):
             glyph_list.extend([n[1] for n in names])
             glyph_list.append("_END_")
             self._saveGlyphSelection(font)
-            font.glyphOrder = glyph_list
+            self._showGlyphList(font, glyph_list)
             self._restoreGlyphSelection(font)
 
     @objc.python_method
