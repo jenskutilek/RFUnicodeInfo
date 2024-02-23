@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 # Unicode Info
 # An extension for the RoboFont editor
 # Version 0.1 by Jens Kutilek 2016-10-24
